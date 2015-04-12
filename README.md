@@ -1,89 +1,21 @@
-Yii 2 Basic Application Template
+Testurself
 ================================
 
-Yii 2 Basic Application Template is a skeleton Yii 2 application best for
-rapidly creating small projects.
-
-The template contains the basic features including user login/logout and a contact page.
-It includes all commonly used configurations that would allow you to focus on adding new
-features to your application.
+Testurself is a open source web application made with Yii2 and AngularJS by me, Víctor Arcas, to offer a friend
+(and anyone who wants to create their own tests to whatever non profit purpose) a better way to study.
 
 
-DIRECTORY STRUCTURE
+Why Yii2 and AngularJS?
 -------------------
 
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
+Nowadays, when I write this readme file, I'm working as intern in a Software Development Company who, mainly, developes web applications in PHP and Javascript. We use Yii2 for multiple projects, so I started this project to practice Yii2, but some weeks after I ask the leaders to start using AngularJS for a better UX (they want me to take care of the UX as the main frontend developer and I immediately start looking for a JavaScript framework to speed up this frontend development, ease my work and write better JS code), and after a bit insistence, they accept, and I decide to develope this application with a 100% Yii2 backend, but a 100% AngularJS frontend (at this time is rather only a 90% in AngularJS because of the usage of JQuery for sending http requests and using DataTables).
 
-
-
-REQUIREMENTS
-------------
-
-The minimum requirement by this application template that your Web server supports PHP 5.4.0.
-
-
-INSTALLATION
-------------
-
-### Install from an Archive File
-
-Extract the archive file downloaded from [yiiframework.com](http://www.yiiframework.com/download/) to
-a directory named `basic` that is directly under the Web root.
-
-You can then access the application through the following URL:
-
-~~~
-http://localhost/basic/web/
-~~~
-
-
-### Install via Composer
-
-If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-You can then install this application template using the following command:
-
-~~~
-php composer.phar global require "fxp/composer-asset-plugin:1.0.0"
-php composer.phar create-project --prefer-dist --stability=dev yiisoft/yii2-app-basic basic
-~~~
-
-Now you should be able to access the application through the following URL, assuming `basic` is the directory
-directly under the Web root.
-
-~~~
-http://localhost/basic/web/
-~~~
-
-
-CONFIGURATION
+Why a tests application?
 -------------
 
-### Database
+Just because my best friend ask me one time to teach him programming for do some practical scripting to help herself in his studies. When I ask him "like what" he tells me "like tests". So a few days after I decide to do a fast programming project with Yii2 (after knowing AngularJS).
 
-Edit the file `config/db.php` with real data, for example:
+### License
 
-```php
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '1234',
-    'charset' => 'utf8',
-];
-```
+This project is open-sourced software licensed under the [GPL license](http://www.gnu.org/copyleft/gpl.html)
 
-**NOTE:** Yii won't create the database for you, this has to be done manually before you can access it.
-
-Also check and edit the other files in the `config/` directory to customize your application.
