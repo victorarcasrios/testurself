@@ -54,7 +54,7 @@ class Test extends \yii\db\ActiveRecord
      */
     public function getExaminations()
     {
-        return $this->hasMany(Examinations::className(), ['test_id' => 'id']);
+        return $this->hasMany(Examination::className(), ['test_id' => 'id']);
     }
 
     /**
@@ -62,14 +62,20 @@ class Test extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTestsQuestions()
+    public function getTestQuestions()
     {
-        return $this->hasMany(TestsQuestions::className(), ['test_id' => 'id']);
+        return $this->hasMany(TestQuestion::className(), ['test_id' => 'id']);
+    }
+
+    public function getQuestions()
+    {
+        return $this->hasMany(Question::className(), ['id' => 'question_id'])
+                    ->viaTable(TestQuestion::tableName(), ['test_id' => 'id']);
     }
 }

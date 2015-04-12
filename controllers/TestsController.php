@@ -36,10 +36,25 @@ class TestsController extends Controller
         return $this->render('index');
     }
 
+    public function actionList()
+    {
+        \Yii::$app->response->format = 'json';
+        return Test::find()->all();
+    }
+
+    public function actionGet($id)
+    {
+        $test = Test::findOne($id);
+        if(! $test) return ['status' => -2];
+
+        \Yii::$app->response->format = 'json';
+        return ['status' => 1, 'test' => $test, 'questions' => $test->questions];        
+    }
+
     /**
-     * Creates a new Test model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * If request is GET, renders the form in creation mode
+     * Else if it is an AJAX POST, calls create() with the given test data
+     * @return mixed [rendered view | 1 | 0]
      */
     public function actionCreate()
     {
@@ -53,21 +68,21 @@ class TestsController extends Controller
 
     private function create($testData)
     {
-        if(Test::find()->where("name = {$testData['name']}")->exists()) return 0;
+        if(Test::find()->where(['name' => $testData['name']])->exists()) return 0;
 
         $test = new Test();
         $test->name = $testData['name'];
         $test->user_id = 1;
         if( !$test->save() ) return 0;
 
-        return $this->addQuestions($testData['questions'], $test->id);
+        return $this->addQuestions($testData['questions'], $test);
     }
 
-    private function addQuestions($questions, $testId)
+    private function addQuestions($questions, $test)
     {
         foreach($questions as $question){
             $testQuestion = new TestQuestion();
-            $testQuestion->test_id = $testId;
+            $testQuestion->test_id = $test->id;
             $testQuestion->question_id = $question['id'];
             if( !$testQuestion->save() ) return 0;
         }
@@ -88,6 +103,27 @@ class TestsController extends Controller
             ]);
         else if(Yii::$app->request->isAjax && Yii::$app->request->isPost)
             return $this->edit(Yii::$app->request->post('test'));
+    }
+
+    private function edit($testData)
+    {
+        $test = Test::findOne($testData['id']);
+
+        if($this->nameIsAlreadyUsedByOther($testData)) return 0;
+
+        $test->name = $testData['name'];
+        if( !$test->save() ) return 0;
+
+        TestQuestion::deleteAll(['test_id' => $test->id]);
+        return $this->addQuestions($testData['questions'], $test);
+    }
+
+    private function nameIsAlreadyUsedByOther($testData)
+    {
+        return Test::find()
+            ->where(['name' => $testData['name']])
+            ->andWhere(['<>', 'id', $testData['id']])
+            ->exists();
     }
 
     public function actionDelete()

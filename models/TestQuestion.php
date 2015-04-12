@@ -32,7 +32,7 @@ class TestQuestion extends \yii\db\ActiveRecord
     {
         return [
             [['test_id', 'question_id', 'id'], 'integer'],
-            [['id'], 'required']
+            [['test_id', 'question_id'], 'required']
         ];
     }
 
@@ -61,7 +61,7 @@ class TestQuestion extends \yii\db\ActiveRecord
      */
     public function getQuestion()
     {
-        return $this->hasOne(Questions::className(), ['id' => 'question_id']);
+        return $this->hasOne(Question::className(), ['id' => 'question_id']);
     }
 
     /**

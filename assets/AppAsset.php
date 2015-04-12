@@ -26,7 +26,8 @@ class AppAsset extends AssetBundle
         'js/dataTables.bootstrap.min.js',
         'js/questions/form.js',
         'js/questions/index.js',
-        'js/tests/form.js'
+        'js/tests/form.js',
+        'js/tests/index.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

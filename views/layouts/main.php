@@ -50,13 +50,8 @@ AppAsset::register($this);
                     'options' => ['class' => 'navbar-nav'],
                     'items' => [
                         ['label' => 'Preguntas', 'url' => '?r=questions/index'],
-                        /*[
-                            'label' => 'Tests',
-                            'items' => [
-                                ['label' => 'Mis tests', 'url' => 'tests/index'],
-                                ['label' => 'Nuevo test', 'url' => 'tests/create'],
-                            ]
-                        ],
+                        ['label' => 'Tests', 'url' => '?r=tests/index'],
+                        /*
                         [
                             'label' => 'Evaluaciones',
                             'items' => [

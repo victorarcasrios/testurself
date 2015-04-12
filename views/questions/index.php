@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									</a>-->
 									<a href="index.php?r=questions/edit&id={{ question.id }}" 
 									title="Editar" class="btn-lg">
-										<i class="glyphicon glyphicon-edit"></i>
+										<i class="glyphicon glyphicon-pencil"></i>
 									</a>
 							        <a href="javascript:void(0);" 
 							        ng-click="Delete(key)" class="btn-lg" title="Eliminar">

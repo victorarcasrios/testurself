@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>
 			</div>
 			<div class="panel-body">
-				<div class="row-fluid">
+				<div class="row-fluid" id="messages">
 					<div class="col-lg-12 alert alert-success" style="text-align: center" 
 					ng-show="BothQuestionsCollapsed() && created === SUCCESS">
 						Test creado satisfactoriamente. Abre la sección Autoevaluaciones
@@ -55,6 +55,20 @@ $this->params['breadcrumbs'][] = $this->title;
 					ng-show="created === ERROR">
 						Lo sentimos. Ocurrió un error mientras creábamos el test. 
 						Inténtalo de nuevo en un rato o contacta con soporte
+					</div>
+					<div class="col-lg-12 alert alert-success" style="text-align: center" 
+					ng-show="updated === SUCCESS">
+						Test editado satisfactoriamente.
+					</div>
+					<div class="col-lg-12 alert alert-danger" style="text-align: center;"
+					ng-show="updated === ERROR">
+						Ocurrió un error mientras cargábamos/editabamos 
+						el test. Inténtalo dentro de un rato o contacta con soporte
+					</div>
+					<div class="col-lg-12 alert alert-danger" style="text-align: center;"
+					ng-show="updated === TEST_NOT_FOUND">
+						Test no encontrado. Vuelve al índice de tests y 
+						clica en el icono de edición para ver el que desees.
 					</div>
 				</div>
 				<div class="row" style="padding-bottom: 10px;">
@@ -167,3 +181,4 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <input type="hidden" id="urlToGetAllQuestions" value="<?= Yii::$app->urlManager->createUrl('questions/list') ?>">
+<input type="hidden" id="urlToGetTest" value="<?= Yii::$app->urlManager->createUrl('tests/get') ?>">

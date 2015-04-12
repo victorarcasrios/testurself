@@ -9,9 +9,12 @@ angular.module('TestsForm', [])
 		$scope.SUCCESS = 1;
 		$scope.ERROR = -1;
 		$scope.UNTOUCHED = 0;
-		$scope.CREATED = $scope.UNTOUCHED;
+		$scope.TEST_NOT_FOUND = -2;
+		$scope.created = $scope.UNTOUCHED;
+		$scope.updated = $scope.UNTOUCHED;
 
 		$scope.test = {
+			id: undefined,
 			name: undefined,
 			questions: []
 		};
@@ -23,6 +26,55 @@ angular.module('TestsForm', [])
 		$scope.Init = function()
 		{
 			$scope.LoadRemainingQuestions();
+		}
+
+		$scope.Load = function(id)
+		{
+			var url = $("#urlToGetTest").val() + '&id=' +id;
+
+			$.get(url, function(data){
+				if(data.status == $scope.SUCCESS){
+					$scope.test = data.test;
+					$scope.ReloadQuestions(data.questions);					
+				}
+				else if(data.status == $scope.TEST_NOT_FOUND)
+					$scope.updated = $scope.TEST_NOT_FOUND;
+				else
+					$scope.updated = $scope.ERROR;
+			});
+		}
+
+		$scope.ReloadQuestions = function(questions)
+		{
+			$scope.test.questions = questions;	
+			$scope.RemoveQuestionFromRemainingsTable(questions);
+			$scope.$apply();
+		}
+
+		$scope.RemoveQuestionFromRemainingsTable = function(questions)
+		{
+			angular.forEach(questions, function(target, key){
+				$scope.remainingQuestions = $scope.remainingQuestions.filter(function(current){ 
+					return current.id != target.id;
+				});
+			}); 
+		}
+
+		$scope.Edit = function(key)
+		{
+			if($scope.CanNotSubmit()) return;
+
+			var url = $("#urlToUpdateTest").val();
+
+			$.post(url, {
+				_csrf: csrfToken,
+				test: $scope.test
+			}, function(data){
+				if(data.status == $scope.SUCCESS)
+					$scope.updated = $scope.SUCCESS;
+				else
+					$scope.updated = ERROR;
+			});
 		}
 
 		$scope.LoadRemainingQuestions = function()
@@ -73,13 +125,16 @@ angular.module('TestsForm', [])
 
 		$scope.OnTestCreated = function()
 		{
+			$scope.remainingQuestions.push.apply($scope.remainingQuestions, $scope.test.questions);
 			$scope.test = {
 				name: undefined,
 				questions: []
 			};
-			$scope.currentQuestionsCollapsed = true;
-			$scope.remainingQuestionsCollapsed = true;
-			$scope.created = $scope.SUCCESS;
+			$scope.$apply(function(){
+				$scope.currentQuestionsCollapsed = true;
+				$scope.remainingQuestionsCollapsed = true;
+				$scope.created = $scope.SUCCESS;
+			});			
 		}
 
 		$scope.BothQuestionPanelsCollapsed = function()
