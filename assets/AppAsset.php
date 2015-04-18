@@ -27,7 +27,8 @@ class AppAsset extends AssetBundle
         'js/questions/form.js',
         'js/questions/index.js',
         'js/tests/form.js',
-        'js/tests/index.js'
+        'js/tests/index.js',
+        'js/examinations/form.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
