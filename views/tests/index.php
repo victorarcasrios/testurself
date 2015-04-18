@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 											title="Editar" class="btn-lg">
 												<i class="glyphicon glyphicon-pencil"></i>
 											</a>
-											<a href="index.php?r=examinations/new&id={{ test.id }}" 
+											<a href="index.php?r=examinations/new&testId={{ test.id }}" 
 											title="Realizar" class="btn-lg">
 												<i class="glyphicon glyphicon-check"></i>
 											</a>

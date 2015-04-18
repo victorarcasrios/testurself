@@ -34,7 +34,8 @@ ng-init="Init(<?= $testId ?>)">
 		</div>
 		<div class="row">
 			<div class="col-lg-12" ng-repeat="(key, option) in current.options">
-				<div class="alert alert-warning" style="text-align: center;">
+				<div class="alert" style="text-align: center;" ng-click="Mark(key)"
+				ng-class="{'alert-warning': !HasSelected(), 'alert-success': IsSelected(key), 'alert-danger': !IsSelected(key) && HasSelected()}">
 					{{ option.text }}
 				</div>
 			</div>
@@ -42,15 +43,22 @@ ng-init="Init(<?= $testId ?>)">
 	</div>
 	<div class="panel-heading" style="background: cornflowerblue;">
 		<div class="row">
-			<div class="col-lg-2">
+			<div class="col-lg-4">
 				<button class="btn btn-lg btn-info" ng-hide="IsFirst()" ng-click="Previous()">
 					<i class="glyphicon glyphicon-menu-left"></i>
 				</button>
 			</div>
-			<div class="col-lg-8">
-				<button class="center-block btn btn-primary btn-lg">Finalizar</button>
+			<div class="col-lg-3 col-lg-offset-1">
+				<center>
+					<div class="input-group">
+						<div class="input-group-addon alert-info" title="Preguntas contestadas">
+							{{answered}}/{{questions.length}}
+						</div>
+						<button class="btn btn-primary btn-lg">Finalizar</button>
+					</div>
+				</center>
 			</div>
-			<div class="col-lg-2">
+			<div class="col-lg-4">
 				<button class="btn btn-lg btn-info pull-right" ng-hide="IsLast()" ng-click="Next()">
 					<i class="glyphicon glyphicon-menu-right"></i>
 				</button>

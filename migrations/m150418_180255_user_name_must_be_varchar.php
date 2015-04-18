@@ -3,16 +3,16 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150318_231919_rename_answers_table extends Migration
+class m150418_180255_user_name_must_be_varchar extends Migration
 {
     public function up()
     {
-        $this->renameTable('answers', 'options');
+        $this->alterColumn('users', 'name', 'VARCHAR(15)');
     }
 
     public function down()
     {
-        $this->renameTable('options', 'answers');
+        $this->alterColumn('users', 'name', 'INT(20)');
     }
     
     /*

@@ -3,9 +3,10 @@ angular.module('ExaminationsForm', [])
 	{
 		$scope.SUCCESS = 1;
 		$scope.questionNum = 1;
+		$scope.answered = 0;
 
 		$scope.test = {};
-		$scope.questions = [];
+		$scope.questions = [];		
 
 		$scope.Init = function(testId)
 		{
@@ -17,7 +18,6 @@ angular.module('ExaminationsForm', [])
 					$scope.test = data.test;
 					$scope.questions = data.questions;
 					$scope.current = $scope.questions[0];
-					console.log($scope.current);
 					$scope.$apply();
 				}
 			});
@@ -47,6 +47,25 @@ angular.module('ExaminationsForm', [])
 
 			$scope.current = $scope.questions[$scope.questions.indexOf($scope.current) + 1];	
 			$scope.questionNum++;
+		}
+
+		$scope.Mark = function(key)
+		{
+			var isForFirstTimeSelected = !$scope.HasSelected();
+			
+			if( isForFirstTimeSelected ) $scope.answered++;
+			
+			$scope.current.selected = key;
+		}
+
+		$scope.IsSelected = function(key)
+		{
+			return $scope.current.selected == key;
+		}
+
+		$scope.HasSelected = function()
+		{
+			return !angular.isUndefined($scope.current.selected);
 		}
 	}
 );
