@@ -1,15 +1,20 @@
 angular.module('ExaminationsForm', [])
 	.controller('ExaminationsController', function($scope)
 	{
+		var csrfToken = $('meta[name="csrf-token"]').attr("content");
+		$scope.EXAMINATION_ID = false;
+		$scope.LETTERS = ['a', 'b', 'c', 'd'];
 		$scope.SUCCESS = 1;
 		$scope.questionNum = 1;
 		$scope.answered = 0;
 
 		$scope.test = {};
 		$scope.questions = [];		
+		$scope.toSave = []; 
 
-		$scope.Init = function(testId)
+		$scope.Init = function(id, testId)
 		{
+			$scope.EXAMINATION_ID = id;
 			$scope.test.id = testId;
 			var url = $("#urlToGetNewExamination").val() + '&testId=' + testId;
 
@@ -21,6 +26,11 @@ angular.module('ExaminationsForm', [])
 					$scope.$apply();
 				}
 			});
+		}
+
+		$scope.GetStatus = function()
+		{
+			return $scope.toSave.lenght ? 'Guardar' : "Guardado";
 		}
 
 		$scope.IsFirst = function()
@@ -56,6 +66,26 @@ angular.module('ExaminationsForm', [])
 			if( isForFirstTimeSelected ) $scope.answered++;
 			
 			$scope.current.selected = key;
+			$scope.toSave.push($scope.current);
+			$scope.Save();
+		}
+
+		$scope.Save = function()
+		{
+			var url = $("#urlToSaveExaminationAnswers").val();
+
+			$.post(url, {
+				_csrf: csrfToken,
+				examinationId: $scope.EXAMINATION_ID,
+				answers: $scope.toSave
+			}, function(data){
+				console.log(data);
+				if(data == $scope.SUCCESS){
+					$scope.$apply(function(){
+						$scope.toSave = [];
+					});
+				}
+			});
 		}
 
 		$scope.IsSelected = function(key)

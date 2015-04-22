@@ -16,11 +16,18 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div>
 			<div class="panel-body">
 				<div class="row" style="padding-bottom: 10px;">
-					<div class="col-lg-12">
+					<div class="col-lg-8">
 						<a href="<?= Yii::$app->urlManager->createUrl('tests/create') ?>"
 						 class="btn btn-success">
 							Nuevo test
 						</a>
+					</div>
+					<div class="col-lg-4">
+						<?php if(isset($infoMessage)): ?>
+						<div class="alert alert-info" style="text-align: center;">
+							<?= $infoMessage ?>
+						</div>
+						<?php endif; ?>
 					</div>
 				</div>
 				<div class="row">

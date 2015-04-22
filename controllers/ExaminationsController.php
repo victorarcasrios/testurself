@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Examination;
 use app\models\Test;
+use app\models\TestQuestion;
+use app\models\Answer;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -27,26 +29,28 @@ class ExaminationsController extends Controller
         ];
     }
 
-    // /**
-    //  * Lists all Examination models.
-    //  * @return mixed
-    //  */
-    // public function actionIndex()
-    // {
-    //     $dataProvider = new ActiveDataProvider([
-    //         'query' => Examination::find(),
-    //     ]);
+    public function actionIndex()
+    {
+        return $this->render('index');
+    }
 
-    //     return $this->render('index', [
-    //         'dataProvider' => $dataProvider,
-    //     ]);
-    // }
+    public function actionList()
+    {
+        \Yii::$app->response->format = 'json';
+
+        $output = array();
+        $examinations = Examination::find()->all();
+
+        foreach($examinations as $key => $examination){
+            $output[$key] = ['examination' => $examination, 'test' => $examination->test];
+        }
+        return $output;
+    }
 
     /**
-     * Creates a new Examination model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+        EDITION
+    */
+
     public function actionNew($testId = false)
     {
         if(!$testId)
@@ -54,9 +58,21 @@ class ExaminationsController extends Controller
                 'infoMessage' => 'Selecciona el test que quierar realizar'
             ]);
 
+        $examination = $this->generateExamination($testId);
+
         return $this->render('form', [
+            'id' => $examination->id,
             'testId' => $testId
         ]);
+    }
+
+    private function generateExamination($testId)
+    {
+        $examination = new Examination();
+        $examination->user_id = 1;
+        $examination->test_id = $testId;
+        $examination->save();
+        return $examination;
     }
 
     public function actionGetNewForTest($testId)
@@ -74,6 +90,52 @@ class ExaminationsController extends Controller
             ];
         }
         return ['status' => 1, 'test' => $test, 'questions' => $questions];
+    }
+
+    public function actionSaveAnswers()
+    {
+        \Yii::$app->response->format = 'json';
+        $data = Yii::$app->request->post();
+        $examination = Examination::findOne($data['examinationId']);
+        $test = $examination->test;
+        $answers = $data['answers'];
+
+        return $this->saveAnswers($examination, $test, $answers);
+    }
+
+    private function saveAnswers($examination, $test, $answers)
+    {
+        foreach($answers as $answerData)
+        {
+            $optionId = $answerData['options'][$answerData['selected']]['id'];
+            $questionId = $answerData['question']['id'];
+            
+            ## Test question not found
+            $testQuestion = TestQuestion::findOne(['test_id' => $test->id, 'question_id' => $questionId]);
+            if(!$testQuestion) continue;
+
+            ## Look for answer
+            $answer = Answer::findOne([
+                'examination_id' => $examination->id,
+                'test_question_id' => $testQuestion->id
+            ]);
+
+            ## New
+            if(!$answer)
+                if( !$this->newAnswer(new Answer(), $examination->id, $testQuestion->id, $optionId) ) return 0;
+            ## Or existent
+            $answer->option_id = intval($optionId);
+            if( !$answer->save() ) return 0;
+        }
+        return 1;
+    }
+
+    private function newAnswer($answer, $examinationId, $testQuestionId, $optionId)
+    {
+        $answer->examination_id = $examinationId;
+        $answer->test_question_id = $testQuestionId;
+        $answer->option_id = $optionId;
+        return $answer->save();
     }
 
     /**

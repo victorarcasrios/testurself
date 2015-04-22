@@ -51,14 +51,7 @@ AppAsset::register($this);
                     'items' => [
                         ['label' => 'Preguntas', 'url' => '?r=questions/index'],
                         ['label' => 'Tests', 'url' => '?r=tests/index'],
-                        /*
-                        [
-                            'label' => 'Evaluaciones',
-                            'items' => [
-                                ['label' => 'Mis evaluaciones', 'url' => 'examinations/index'],
-                                ['label' => 'Comenzar nueva autoevaluación', 'url' => 'examinations/new'],
-                            ]
-                        ]*/
+                        ['label' => 'Autoevaluaciones', 'url' => '?r=examinations/index'],
                     ],
                 ]);
             
