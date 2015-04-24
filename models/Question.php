@@ -72,4 +72,15 @@ class Question extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TestQuestion::className(), ['question_id' => 'id']);
     }
+
+    public function getAnswer($examination)
+    {
+        $testQuestion = $this->getTestsQuestions()->where(['test_id' => $examination->test->id])->one();
+        // $testQuestion = $examination->test->getTestsQuestions->where(['question_id' => $this->id])->one();
+
+        return Answer::findOne([
+            'examination_id' => $examination->id,
+            'test_question_id' =>  $testQuestion->id
+        ]);
+    }
 }

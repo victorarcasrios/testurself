@@ -13,19 +13,55 @@ angular.module('ExaminationsForm', [])
 		$scope.toSave = []; 
 
 		$scope.Init = function(id, testId)
-		{
+		{console.log(id);
 			$scope.EXAMINATION_ID = id;
+			var testId = testId || false;
+
+			if(testId)
+				$scope.NewExaminationInit(id, testId);
+			else
+				$scope.ContinueExaminationInit(id);
+		}
+
+		$scope.ContinueExaminationInit = function(id)
+		{
+			var url = $("#urlToGetExamination").val() + '&id=' + id;
+
+			$.get(url, function(data){
+				if(data.status == $scope.SUCCESS){
+					$scope.Load(data);
+				}
+			});
+		}
+
+		$scope.CountAnswers = function()
+		{
+			angular.forEach($scope.questions, function(question, key){
+				if(question.hasOwnProperty('selected'))
+					$scope.answered++;
+			});
+		}
+
+		$scope.NewExaminationInit = function(id, testId)
+		{
 			$scope.test.id = testId;
 			var url = $("#urlToGetNewExamination").val() + '&testId=' + testId;
 
 			$.get(url, function(data){
 				if(data.status == $scope.SUCCESS){
-					$scope.test = data.test;
-					$scope.questions = data.questions;
-					$scope.current = $scope.questions[0];
-					$scope.$apply();
+					$scope.Load(data);
 				}
 			});
+		}
+
+		$scope.Load = function(data)
+		{
+			console.log(data);
+			$scope.test = data.test;
+			$scope.questions = data.questions;
+			$scope.current = $scope.questions[0];
+			$scope.CountAnswers();
+			$scope.$apply();
 		}
 
 		$scope.GetStatus = function()
@@ -65,7 +101,7 @@ angular.module('ExaminationsForm', [])
 			
 			if( isForFirstTimeSelected ) $scope.answered++;
 			
-			$scope.current.selected = key;
+			$scope.current.selected = $scope.current.options[key].id;
 			$scope.toSave.push($scope.current);
 			$scope.Save();
 		}
@@ -90,7 +126,7 @@ angular.module('ExaminationsForm', [])
 
 		$scope.IsSelected = function(key)
 		{
-			return $scope.current.selected == key;
+			return $scope.current.selected == $scope.current.options[key].id;
 		}
 
 		$scope.HasSelected = function()

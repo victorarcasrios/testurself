@@ -107,7 +107,7 @@ class ExaminationsController extends Controller
     {
         foreach($answers as $answerData)
         {
-            $optionId = $answerData['options'][$answerData['selected']]['id'];
+            $optionId = $answerData['selected'];
             $questionId = $answerData['question']['id'];
             
             ## Test question not found
@@ -136,6 +136,51 @@ class ExaminationsController extends Controller
         $answer->test_question_id = $testQuestionId;
         $answer->option_id = $optionId;
         return $answer->save();
+    }
+
+    public function actionContinue($id)
+    {
+        $examination = Examination::findOne($id);
+
+        if(!$examination || $examination->status == 0)
+            return $this->render('index');
+
+        return $this->render('form', [
+            'id' => $examination->id,
+        ]);
+    }
+
+    public function actionGet($id)
+    {
+        \Yii::$app->response->format = 'json';
+
+        $examination = Examination::findOne($id);
+        $test = $examination->test;
+
+        $questions = array();
+        foreach ($test->questions as $key => $question) {
+            $questions[$key] = [
+                'question' => $question,
+                'options' => $question->options
+            ];
+            if($selected = $question->getAnswer($examination))
+                $questions[$key]['selected'] = $selected->option_id;
+        }
+        return ['status' => 1, 'test' => $test, 'questions' => $questions];
+    }
+
+    public function actionClose($id)
+    {
+        $examination = Examination::findOne($id);
+        $userCantCloseIt = false; //$examination->user->id !== Yii::$app->user->identity->id;
+
+        if($userCantCloseIt)
+            throw new NotFoundHttpException("There's no any examination with this id");
+        else{
+            $examination->status = 0;
+            $examination->save();
+            return $this->render('results', ['id' => $examination->id]);            
+        }
     }
 
     /**

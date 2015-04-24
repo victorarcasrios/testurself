@@ -5,10 +5,11 @@ $this->title = 'Autoevaluación';
 $this->params['breadcrumbs'][] = ['label' => 'Autoevaluaciones', 'url' => ['examinations/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
+$isNew = isset($testId);
 ?>
 
 <div class="panel panel-primary" ng-app="ExaminationsForm" ng-controller="ExaminationsController" 
-ng-init="Init(<?= $id ?>, <?= $testId ?>)">
+ng-init='<?= ($isNew) ? "Init($id, $testId)" : "Init($id)" ?>'>
 	<div class="panel-heading">
 		<div class="row">
 			<div class="col-lg-2">
@@ -59,7 +60,7 @@ ng-init="Init(<?= $id ?>, <?= $testId ?>)">
 					<div class="input-group-addon alert-info" title="Preguntas contestadas">
 						{{answered}}/{{questions.length}}
 					</div>
-					<button class="btn btn-primary btn-lg">Finalizar</button>
+					<a href="<?= Yii::$app->urlManager->createUrl('examinations/close') ?>&id={{ EXAMINATION_ID }}" class="btn btn-primary btn-lg">Finalizar</a>
 				</div>
 			</div>
 			<div class="col-lg-4">
@@ -72,4 +73,5 @@ ng-init="Init(<?= $id ?>, <?= $testId ?>)">
 </div>
 
 <input type="hidden" id="urlToGetNewExamination" value="<?= Yii::$app->urlManager->createUrl('examinations/get-new-for-test') ?>">
+<input type="hidden" id="urlToGetExamination" value="<?= Yii::$app->urlManager->createUrl('examinations/get') ?>">
 <input type="hidden" id="urlToSaveExaminationAnswers" value="<?= Yii::$app->urlManager->createUrl('examinations/save-answers') ?>">
