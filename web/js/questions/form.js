@@ -13,14 +13,6 @@ angular.module('QuestionsForm', [])
 		$scope.options = [
 		];
 
-		// DEBUG INIT
-		// $scope.options = [
-		// 	{text: 1, correct : 0},
-		// 	{text: 2, correct : 0},
-		// 	{text: 3, correct : 1},
-		// 	{text: 4, correct : 0}
-		// ];
-
 		$scope.Load = function(id)
 		{
 			var url = $("#urlToGetQuestion").val();
@@ -138,7 +130,16 @@ angular.module('QuestionsForm', [])
 		$scope.CanAdd = function(){ return !$scope.LimitReached() && $scope.IsValidOption(); }
 
 		$scope.IsValidOption = function(){ 
-			return $scope.IsNewOptionDefined() && $scope.IsUniqueOption(); 
+			var notTooLongOption = !$scope.TooLongOption();
+			return $scope.IsNewOptionDefined() && notTooLongOption && $scope.IsUniqueOption(); 
+		}
+
+		$scope.TooLongOption = function(){
+			var charsCount = $scope.newOption.text.length;
+			var isTooLong = charsCount > 255;
+
+			if(isTooLong) alert('La opción no puede exceder los 255 carácteres ('+charsCount+' actualmente)');
+			return isTooLong;
 		}
 
 		$scope.IsUniqueOption = function()
@@ -153,6 +154,15 @@ angular.module('QuestionsForm', [])
 
 		$scope.IsNewOptionDefined = function(){ return typeof $scope.newOption !== "undefined"; }
 
+		$scope.HasProperText = function()
+		{
+			if(! $scope.HasText ) return false;
+			var charsCount = $scope.question.text.length;
+			var isTooLong = charsCount > 255;
+
+			return isTooLong;
+		}
+
 		$scope.HasText = function()
 		{ 
 			return typeof $scope.question !== "undefined" && typeof $scope.question.text !== "undefined" 
@@ -161,8 +171,10 @@ angular.module('QuestionsForm', [])
 
 		$scope.CanCreate = function()
 		{ 
-			return $scope.HasText() && $scope.HasAtLeastTwoOptions() && $scope.HasCorrect(); 
+			return $scope.HasProperText() && $scope.HasAtLeastTwoOptions() && $scope.HasCorrect(); 
 		}
+
+
 
 		$scope.CanNotCreateIt = function(){ return ! $scope.CanCreate() };
 	}

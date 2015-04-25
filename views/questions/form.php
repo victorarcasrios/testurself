@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="row">
 			<div class="col-lg-12">
 				<textarea id="questionText" rows="5" max-length="255" class="form-control"
-				placeholder="Texto de la pregunta" ng-model="question.text"></textarea>
+				placeholder="Texto de la pregunta (max: 255 caracteres)" ng-model="question.text"></textarea>
 			</div>
 		</div>
 
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<div class="row-fluid" ng-hide="LimitReached()">
 					<div class="col-lg-12" style="padding-bottom: 10px; margin-top: 10px;">
 						<textarea id="optionText" rows="2" max-length="255" class="form-control"
-						placeholder="Nueva opción" ng-model="newOption.text"></textarea>
+						placeholder="Nueva opción (max: 255 caracteres)" ng-model="newOption.text"></textarea>
 					</div>
 					<div class="col-lg-12">
 						<button id="addOptionBtn" class="btn btn-warning pull-right" ng-click="AddOption()">
