@@ -83,4 +83,9 @@ class Question extends \yii\db\ActiveRecord
             'test_question_id' =>  $testQuestion->id
         ]);
     }
+
+    public function getCorrect()
+    {
+        return $this->getOptions()->where(['correct' => 1]);
+    }
 }

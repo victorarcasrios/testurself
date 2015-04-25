@@ -53,7 +53,7 @@ class TestQuestion extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answers::className(), ['test_question_id' => 'id']);
+        return $this->hasMany(Answer::className(), ['test_question_id' => 'id']);
     }
 
     /**
@@ -70,5 +70,10 @@ class TestQuestion extends \yii\db\ActiveRecord
     public function getTest()
     {
         return $this->hasOne(Tests::className(), ['id' => 'test_id']);
+    }
+
+    public function getExaminationAnswer(Examination $examination)
+    {
+        return $this->getAnswers()->where(['examination_id' => $examination->id])->one();
     }
 }

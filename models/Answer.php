@@ -54,7 +54,7 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getExamination()
     {
-        return $this->hasOne(Examinations::className(), ['id' => 'examination_id']);
+        return $this->hasOne(Examination::className(), ['id' => 'examination_id']);
     }
 
     /**
@@ -62,7 +62,7 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getOption()
     {
-        return $this->hasOne(Options::className(), ['id' => 'option_id']);
+        return $this->hasOne(Option::className(), ['id' => 'option_id']);
     }
 
     /**
@@ -70,6 +70,6 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getTestQuestion()
     {
-        return $this->hasOne(TestsQuestions::className(), ['id' => 'test_question_id']);
+        return $this->hasOne(TestsQuestion::className(), ['id' => 'test_question_id']);
     }
 }

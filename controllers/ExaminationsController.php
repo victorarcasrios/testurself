@@ -179,8 +179,17 @@ class ExaminationsController extends Controller
         else{
             $examination->status = 0;
             $examination->save();
-            return $this->render('results', ['id' => $examination->id]);            
+            return $this->render('results', ['examination' => $examination]);            
         }
+    }
+
+    public function actionResults($id)
+    {
+        $examination = Examination::findOne($id);
+
+        return $this->render('results', [
+            'examination' => $examination
+        ]);
     }
 
     /**

@@ -74,4 +74,29 @@ class Examination extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Test::className(), ['id' => 'test_id']);
     }
+
+    public function hadAnswered(Option $option)
+    {
+        return $this->getAnswers()->where(['option_id' => $option->id])->exists();
+    }
+
+    public function getScore()
+    {
+        $elements = $this->test->testQuestions;
+        $answers = $this->getAnswers();
+        $count = count($elements);
+        $score = ['correct' => 0, 'incorrect' => 0, 'notAnswered' => $count, 'total' => $count];
+        foreach($elements as $element)
+        {
+            $answer = $answers->where(['test_question_id' => $element->id])->one();
+            if($answer){
+                    $score['notAnswered']--;
+                if($answer->option_id === $element->question->correct[0]->id)
+                    $score['correct']++;
+                else
+                    $score['incorrect']++;
+            }
+        }
+        return $score;
+    }
 }

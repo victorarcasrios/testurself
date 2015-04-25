@@ -34,7 +34,7 @@ $this->title = 'My Yii Application';
                 <p>Realiza tus tests y observa los resultados. No necesitas nada más. Los tests son
                     corregidos al instante.</p>
 
-                <p><a class="btn btn-info" href="<?= Yii::$app->urlManager->createUrl('tests/index') ?>">Víctor Arcas Ríos &raquo;</a></p>
+                <p><a class="btn btn-info" href="<?= Yii::$app->urlManager->createUrl('tests/index') ?>">Autoevaluaciones &raquo;</a></p>
             </div>
         </div>
 
