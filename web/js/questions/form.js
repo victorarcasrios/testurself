@@ -174,8 +174,6 @@ angular.module('QuestionsForm', [])
 			return $scope.HasProperText() && $scope.HasAtLeastTwoOptions() && $scope.HasCorrect(); 
 		}
 
-
-
 		$scope.CanNotCreateIt = function(){ return ! $scope.CanCreate() };
 	}
 );
